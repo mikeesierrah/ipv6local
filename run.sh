@@ -2,9 +2,11 @@
 apt update
 sudo apt install iptables -y
 
-
+echo "1. Iran"
+echo "2. Kharej"
+echo "3. uninstall"
 # Prompt user for IP addresses
-read -p "Iran 1 / Kharej 2 / uninstall 3 : " choices
+read -p "Select number : " choices
 if [ "$choices" -eq 1 ]; then
   ipv4_address=$(curl -s https://api.ipify.org)
   echo "Iran IPv4 is : $ipv4_address"
