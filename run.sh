@@ -1,6 +1,8 @@
 #!/bin/bash
+sudo -i
+sleep 0.5
 apt update
-sudo apt install iptables -y
+apt install iptables -y
 
 echo "1. Iran"
 echo "2. Kharej"
@@ -8,6 +10,7 @@ echo "3. uninstall"
 # Prompt user for IP addresses
 read -p "Select number : " choices
 if [ "$choices" -eq 1 ]; then
+  cp /etc/rc.local /root/rc.local.old
   ipv4_address=$(curl -s https://api.ipify.org)
   echo "Iran IPv4 is : $ipv4_address"
   read -p "enter Kharej Ipv4: " ip_remote
@@ -40,6 +43,7 @@ sysctl -p
   sleep 0.5
   echo "$rctext" > /etc/rc.local
 elif [ "$choices" -eq 2 ]; then
+  cp /etc/rc.local /root/rc.local.old
   ipv4_address=$(curl -s https://api.ipify.org)
   echo "Kharej IPv4 is : $ipv4_address"
   read -p "enter Iran Ip : " ip_remote
@@ -71,18 +75,20 @@ sysctl -p
   sleep 0.5
   echo "$rctext" > /etc/rc.local
 elif [ "$choices" -eq 3 ]; then
-sudo ip link show | awk '/6to4tun/ {split($2,a,"@"); print a[1]}' | xargs -I {} sudo ip link set {} down
-sudo ip link show | awk '/6to4tun/ {split($2,a,"@"); print a[1]}' | xargs -I {} sudo ip tunnel del {}
-sudo ip link show | awk '/GRE6Tun/ {split($2,a,"@"); print a[1]}' | xargs -I {} sudo ip link set {} down
-sudo ip link show | awk '/GRE6Tun/ {split($2,a,"@"); print a[1]}' | xargs -I {} sudo ip tunnel del {}
-sudo echo > /etc/rc.local
-echo "uninstalled successfully"
-read -p "do you want to reboot?(recommended)[y/n] : " yes_no
+  mv /root/rc.local.old /etc/rc.local
+  ip link show | awk '/6to4tun/ {split($2,a,"@"); print a[1]}' | xargs -I {} ip link set {} down
+  ip link show | awk '/6to4tun/ {split($2,a,"@"); print a[1]}' | xargs -I {} ip tunnel del {}
+  ip link show | awk '/GRE6Tun/ {split($2,a,"@"); print a[1]}' | xargs -I {} ip link set {} down
+  ip link show | awk '/GRE6Tun/ {split($2,a,"@"); print a[1]}' | xargs -I {} ip tunnel del {}
+  echo > /etc/rc.local
+  echo "uninstalled successfully"
+  read -p "do you want to reboot?(recommended)[y/n] : " yes_no
 	if [[ $yes_no =~ ^[Yy]$ ]] || [[ $yes_no =~ ^[Yy]es$ ]]; then
- 		sudo reboot
+ 		reboot
 	fi
 else
   echo "wrong input"
+  exit 1
 fi
 
 chmod +x /etc/rc.local
@@ -95,5 +101,10 @@ echo    # move to a new line
 if [[ $yes_no =~ ^[Yy]$ ]] || [[ $yes_no =~ ^[Yy]es$ ]]; then
 	bash <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh)
 fi
-echo "IP Kharej: 2001:470:1f10:e1f::2"
-echo "IP Iran: 2001:470:1f10:e1f::1"
+echo    # move to a new line
+if [ "$choices" -eq 1 ]; then
+echo "Local IPv6 Iran: 2001:470:1f10:e1f::1"
+
+elif [ "$choices" -eq 2 ]; then
+echo "Local IPv6 Kharej: 2001:470:1f10:e1f::2"
+fi
