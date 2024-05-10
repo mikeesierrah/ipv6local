@@ -1,5 +1,4 @@
 #!/bin/bash
-sudo -i
 sleep 0.5
 apt update
 apt install iptables -y
