@@ -4,7 +4,7 @@ sudo apt install iptables -y
 
 
 # Prompt user for IP addresses
-read -p "Iran 1 / Kharej 2 : " choices
+read -p "Iran 1 / Kharej 2 / uninstall 3 : " choices
 if [ "$choices" -eq 1 ]; then
   ipv4_address=$(curl -s https://api.ipify.org)
   echo "Iran IPv4 is : $ipv4_address"
@@ -68,6 +68,16 @@ sysctl -p
 '
   sleep 0.5
   echo "$rctext" > /etc/rc.local
+elif [ "$choices" -eq 3 ]; then
+sudo ip link show | awk '/6to4tun/ {split($2,a,"@"); print a[1]}' | xargs -I {} sudo ip link set {} down
+sudo ip link show | awk '/6to4tun/ {split($2,a,"@"); print a[1]}' | xargs -I {} sudo ip tunnel del {}
+sudo ip link show | awk '/GRE6Tun/ {split($2,a,"@"); print a[1]}' | xargs -I {} sudo ip link set {} down
+sudo ip link show | awk '/GRE6Tun/ {split($2,a,"@"); print a[1]}' | xargs -I {} sudo ip tunnel del {}
+sudo echo > /etc/rc.local
+read -p "do you want to reboot?(recommended)[y/n] : " yes_no
+	if [[ $yes_no =~ ^[Yy]$ ]] || [[ $yes_no =~ ^[Yy]es$ ]]; then
+    sudo reboot
+	fi
 else
   echo "wrong input"
 fi
@@ -80,7 +90,7 @@ echo    # move to a new line
 echo    # move to a new line
 
 if [[ $yes_no =~ ^[Yy]$ ]] || [[ $yes_no =~ ^[Yy]es$ ]]; then
-  bash <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh)
+	bash <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh)
 fi
 echo "IP Kharej: 2001:470:1f10:e1f::2"
 echo "IP Iran: 2001:470:1f10:e1f::1"
