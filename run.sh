@@ -77,7 +77,7 @@ sudo echo > /etc/rc.local
 echo "uninstalled successfully"
 read -p "do you want to reboot?(recommended)[y/n] : " yes_no
 	if [[ $yes_no =~ ^[Yy]$ ]] || [[ $yes_no =~ ^[Yy]es$ ]]; then
-    sudo reboot
+ 		sudo reboot
 	fi
 else
   echo "wrong input"
