@@ -48,6 +48,12 @@ sysctl -p
 '
   sleep 0.5
   echo "$rctext" > /etc/rc.local
+  read -p "do you want to install X-ui too?(y/n) : " yes_no
+  echo    # move to a new line
+
+  if [[ $yes_no =~ ^[Yy]$ ]] || [[ $yes_no =~ ^[Yy]es$ ]]; then
+    bash <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh)
+  fi
 elif [ "$choices" -eq 2 ]; then
   cp /etc/rc.local /root/rc.local.old
   ipv4_address=$(curl -s https://api.ipify.org)
@@ -100,16 +106,9 @@ if [[ "$choices" -eq 1 || "$choices" -eq 2 ]]; then
   chmod +x /etc/rc.local
   sleep 0.5
   /etc/rc.local
-  read -p "do you want to install X-ui too?(y/n) : " yes_no
-  echo    # move to a new line
-
-  if [[ $yes_no =~ ^[Yy]$ ]] || [[ $yes_no =~ ^[Yy]es$ ]]; then
-    bash <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh)
-  fi
   echo    # move to a new line
   if [ "$choices" -eq 1 ]; then
   echo "Local IPv6 Iran: 2001:470:1f10:e1f::1"
-
   elif [ "$choices" -eq 2 ]; then
   echo "Local IPv6 Kharej: 2001:470:1f10:e1f::2"
   fi
