@@ -92,7 +92,6 @@ elif [ "$choices" -eq 3 ]; then
   ip link show | awk '/6to4tun/ {split($2,a,"@"); print a[1]}' | xargs -I {} ip tunnel del {}
   ip link show | awk '/GRE6Tun/ {split($2,a,"@"); print a[1]}' | xargs -I {} ip link set {} down
   ip link show | awk '/GRE6Tun/ {split($2,a,"@"); print a[1]}' | xargs -I {} ip tunnel del {}
-  echo > /etc/rc.local
   echo "uninstalled successfully"
   read -p "do you want to reboot?(recommended)[y/n] : " yes_no
 	if [[ $yes_no =~ ^[Yy]$ ]] || [[ $yes_no =~ ^[Yy]es$ ]]; then
