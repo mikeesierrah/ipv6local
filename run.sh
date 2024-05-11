@@ -48,7 +48,7 @@ sysctl -p
 '
   sleep 0.5
   echo "$rctext" > /etc/rc.local
-  read -p "do you want to install X-ui too?(y/n) :" yes_no
+  read -p "do you want to install X-Ui for tunnling?(y/n) :" yes_no
   echo    # move to a new line
 
   if [[ $yes_no =~ ^[Yy]$ ]] || [[ $yes_no =~ ^[Yy]es$ ]]; then
