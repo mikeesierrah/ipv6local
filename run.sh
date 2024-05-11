@@ -92,6 +92,7 @@ elif [ "$choices" -eq 3 ]; then
   ip link show | awk '/6to4tun/ {split($2,a,"@"); print a[1]}' | xargs -I {} ip tunnel del {}
   ip link show | awk '/GRE6Tun/ {split($2,a,"@"); print a[1]}' | xargs -I {} ip link set {} down
   ip link show | awk '/GRE6Tun/ {split($2,a,"@"); print a[1]}' | xargs -I {} ip tunnel del {}
+  echo > /etc/rc.local
   echo "uninstalled successfully"
   read -p "do you want to reboot?(recommended)[y/n] : " yes_no
 	if [[ $yes_no =~ ^[Yy]$ ]] || [[ $yes_no =~ ^[Yy]es$ ]]; then
@@ -106,9 +107,8 @@ if [[ "$choices" -eq 1 || "$choices" -eq 2 ]]; then
   sleep 0.5
   /etc/rc.local
   echo    # move to a new line
-  if [ "$choices" -eq 1 ]; then
-  echo "Local IPv6 Iran: 2001:470:1f10:e1f::1"
-  elif [ "$choices" -eq 2 ]; then
+
+  if [ "$choices" -eq 2 ]; then
   echo "Local IPv6 Kharej: 2001:470:1f10:e1f::2"
   fi
 fi
