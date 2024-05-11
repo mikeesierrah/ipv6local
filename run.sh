@@ -19,7 +19,7 @@ if [ "$choices" -eq 1 ]; then
   cp /etc/rc.local /root/rc.local.old
   ipv4_address=$(curl -s https://api.ipify.org)
   echo "Iran IPv4 is : $ipv4_address"
-  read -p "enter Kharej Ipv4:" ip_remote
+  read -p "enter Kharej Ipv4 :" ip_remote
   rctext='#!/bin/bash
 
 ip tunnel add 6to4tun_IR mode sit remote '"$ip_remote"' local '"$ipv4_address"'
@@ -48,7 +48,7 @@ sysctl -p
 '
   sleep 0.5
   echo "$rctext" > /etc/rc.local
-  read -p "do you want to install X-ui too?(y/n) : " yes_no
+  read -p "do you want to install X-ui too?(y/n) :" yes_no
   echo    # move to a new line
 
   if [[ $yes_no =~ ^[Yy]$ ]] || [[ $yes_no =~ ^[Yy]es$ ]]; then
@@ -93,7 +93,7 @@ elif [ "$choices" -eq 3 ]; then
   ip link show | awk '/GRE6Tun/ {split($2,a,"@"); print a[1]}' | xargs -I {} ip link set {} down
   ip link show | awk '/GRE6Tun/ {split($2,a,"@"); print a[1]}' | xargs -I {} ip tunnel del {}
   echo "uninstalled successfully"
-  read -p "do you want to reboot?(recommended)[y/n] : " yes_no
+  read -p "do you want to reboot?(recommended)[y/n] :" yes_no
 if [[ $yes_no =~ ^[Yy]$ ]] || [[ $yes_no =~ ^[Yy]es$ ]]; then
 	reboot
 fi
