@@ -20,7 +20,7 @@ if [ "$choices" -eq 1 ]; then
   ipv4_address=$(curl -s https://api.ipify.org)
   echo "Iran IPv4 is : $ipv4_address"
   read -p "enter Kharej Ipv4:" ip_remote
-rctext='#!/bin/bash
+  rctext='#!/bin/bash
 
 ip tunnel add 6to4tun_IR mode sit remote '"$ip_remote"' local '"$ipv4_address"'
 ip -6 addr add 2001:470:1f10:e1f::1/64 dev 6to4tun_IR
@@ -94,9 +94,9 @@ elif [ "$choices" -eq 3 ]; then
   ip link show | awk '/GRE6Tun/ {split($2,a,"@"); print a[1]}' | xargs -I {} ip tunnel del {}
   echo "uninstalled successfully"
   read -p "do you want to reboot?(recommended)[y/n] : " yes_no
-	if [[ $yes_no =~ ^[Yy]$ ]] || [[ $yes_no =~ ^[Yy]es$ ]]; then
- 		reboot
-	fi
+if [[ $yes_no =~ ^[Yy]$ ]] || [[ $yes_no =~ ^[Yy]es$ ]]; then
+	reboot
+fi
 else
   echo "wrong input"
   exit 1
