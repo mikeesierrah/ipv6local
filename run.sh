@@ -19,7 +19,7 @@ if [ "$choices" -eq 1 ]; then
   cp /etc/rc.local /root/rc.local.old
   ipv4_address=$(curl -s https://api.ipify.org)
   echo "Iran IPv4 is : $ipv4_address"
-  read -p "enter Kharej Ipv4: " ip_remote
+  read -p "enter Kharej Ipv4:" ip_remote
 rctext='#!/bin/bash
 
 ip tunnel add 6to4tun_IR mode sit remote '"$ip_remote"' local '"$ipv4_address"'
