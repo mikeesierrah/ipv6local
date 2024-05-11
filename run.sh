@@ -87,7 +87,7 @@ sysctl -p
   sleep 0.5
   echo "$rctext" > /etc/rc.local
 elif [ "$choices" -eq 3 ]; then
-  mv /root/rc.local.old /etc/rc.local
+  sudo mv /root/rc.local.old /etc/rc.local
   ip link show | awk '/6to4tun/ {split($2,a,"@"); print a[1]}' | xargs -I {} ip link set {} down
   ip link show | awk '/6to4tun/ {split($2,a,"@"); print a[1]}' | xargs -I {} ip tunnel del {}
   ip link show | awk '/GRE6Tun/ {split($2,a,"@"); print a[1]}' | xargs -I {} ip link set {} down
