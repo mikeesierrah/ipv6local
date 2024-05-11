@@ -5,8 +5,6 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 # Continue with the rest of the script if running as root
-
-sleep 0.5
 apt update
 apt install iptables -y
 
