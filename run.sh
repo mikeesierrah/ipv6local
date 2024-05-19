@@ -11,6 +11,7 @@ apt install iptables -y
 echo "1. Iran"
 echo "2. Kharej"
 echo "3. uninstall"
+echo "4. hawshemi Optimizer"
 # Prompt user for IP addresses
 read -p "Select number : " choices
 if [ "$choices" -eq 1 ]; then
@@ -50,7 +51,7 @@ sysctl -p
   echo    # move to a new line
 
   if [[ $yes_no =~ ^[Yy]$ ]] || [[ $yes_no =~ ^[Yy]es$ ]]; then
-    bash <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh)
+    bash <(curl -Ls https://raw.githubusercontent.com/alireza0/x-ui/master/install.sh)
   fi
 elif [ "$choices" -eq 2 ]; then
   cp /etc/rc.local /root/rc.local.old
@@ -93,9 +94,12 @@ elif [ "$choices" -eq 3 ]; then
   ip link show | awk '/GRE6Tun/ {split($2,a,"@"); print a[1]}' | xargs -I {} ip tunnel del {}
   echo "uninstalled successfully"
   read -p "do you want to reboot?(recommended)[y/n] :" yes_no
-if [[ $yes_no =~ ^[Yy]$ ]] || [[ $yes_no =~ ^[Yy]es$ ]]; then
-	reboot
-fi
+  if [[ $yes_no =~ ^[Yy]$ ]] || [[ $yes_no =~ ^[Yy]es$ ]]; then
+    reboot
+  fi
+elif [ "$choices" -eq 4 ]; then
+  sudo apt install -y sudo wget
+  wget "https://raw.githubusercontent.com/hawshemi/Linux-Optimizer/main/linux-optimizer.sh" -O linux-optimizer.sh && chmod +x linux-optimizer.sh && bash linux-optimizer.sh 
 else
   echo "wrong input"
   exit 1
