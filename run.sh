@@ -8,8 +8,8 @@ fi
 apt update
 apt install iptables -y
 
-echo "1. Iran"
-echo "2. Kharej"
+echo "1. Inner"
+echo "2. Outer"
 echo "3. uninstall"
 echo "4. hawshemi Linux Optimizer"
 # Prompt user for IP addresses
@@ -17,19 +17,19 @@ read -p "Select number : " choices
 if [ "$choices" -eq 1 ]; then
   cp /etc/rc.local /root/rc.local.old
   ipv4_address=$(curl -s https://api.ipify.org)
-  echo "Iran IPv4 is : $ipv4_address"
-  read -p "enter Kharej Ipv4 :" ip_remote
+  echo "Inner IPv4 is : $ipv4_address"
+  read -p "enter Outer Ipv4 :" ip_remote
   rctext='#!/bin/bash
 
-ip tunnel add 6to4tun_IR mode sit remote '"$ip_remote"' local '"$ipv4_address"'
-ip -6 addr add 2001:470:1f10:e1f::1/64 dev 6to4tun_IR
-ip link set 6to4tun_IR mtu 1480
-ip link set 6to4tun_IR up
+ip tunnel add IOLOCAL mode sit remote '"$ip_remote"' local '"$ipv4_address"'
+ip -6 addr add 2001:470:1f10:e1f::1/64 dev IOLOCAL
+ip link set IOLOCAL mtu 1480
+ip link set IOLOCAL up
 # confige tunnele GRE6 ya IPIPv6 IR
-ip -6 tunnel add GRE6Tun_IR mode ip6gre remote 2001:470:1f10:e1f::2 local 2001:470:1f10:e1f::1
-ip addr add 172.16.1.1/30 dev GRE6Tun_IR
-ip link set GRE6Tun_IR mtu 1436
-ip link set GRE6Tun_IR up
+ip -6 tunnel add GRE_LOCAL mode ip6gre remote 2001:470:1f10:e1f::2 local 2001:470:1f10:e1f::1
+ip addr add 172.16.1.1/30 dev GRE_LOCAL
+ip link set GRE_LOCAL mtu 1436
+ip link set GRE_LOCAL up
 
 iptables -F
 iptables -X
@@ -47,7 +47,7 @@ sysctl -p
 '
   sleep 0.5
   echo "$rctext" > /etc/rc.local
-  read -p "do you want to install X-Ui for tunnling?(y/n) :" yes_no
+  read -p "do you want to install X-Ui?(y/n) :" yes_no
   echo    # move to a new line
 
   if [[ $yes_no =~ ^[Yy]$ ]] || [[ $yes_no =~ ^[Yy]es$ ]]; then
@@ -56,18 +56,18 @@ sysctl -p
 elif [ "$choices" -eq 2 ]; then
   cp /etc/rc.local /root/rc.local.old
   ipv4_address=$(curl -s https://api.ipify.org)
-  echo "Kharej IPv4 is : $ipv4_address"
-  read -p "enter Iran Ip : " ip_remote
+  echo "Outer IPv4 is : $ipv4_address"
+  read -p "enter Inner Ip : " ip_remote
   rctext='#!/bin/bash
-ip tunnel add 6to4tun_KH mode sit remote '"$ip_remote"' local '"$ipv4_address"'
-ip -6 addr add 2001:470:1f10:e1f::2/64 dev 6to4tun_KH
-ip link set 6to4tun_KH mtu 1480
-ip link set 6to4tun_KH up
+ip tunnel add IOREMOTE mode sit remote '"$ip_remote"' local '"$ipv4_address"'
+ip -6 addr add 2001:470:1f10:e1f::2/64 dev IOREMOTE
+ip link set IOREMOTE mtu 1480
+ip link set IOREMOTE up
 
-ip -6 tunnel add GRE6Tun_KH mode ip6gre remote 2001:470:1f10:e1f::1 local 2001:470:1f10:e1f::2
-ip addr add 172.16.1.2/30 dev GRE6Tun_KH
-ip link set GRE6Tun_KH mtu 1436
-ip link set GRE6Tun_KH up
+ip -6 tunnel add GRE_REMOTE mode ip6gre remote 2001:470:1f10:e1f::1 local 2001:470:1f10:e1f::2
+ip addr add 172.16.1.2/30 dev GRE_REMOTE
+ip link set GRE_REMOTE mtu 1436
+ip link set GRE_REMOTE up
 
 iptables -F
 iptables -X
@@ -88,10 +88,10 @@ sysctl -p
 elif [ "$choices" -eq 3 ]; then
   echo > /etc/rc.local
   sudo mv /root/rc.local.old /etc/rc.local
-  ip link show | awk '/6to4tun/ {split($2,a,"@"); print a[1]}' | xargs -I {} ip link set {} down
-  ip link show | awk '/6to4tun/ {split($2,a,"@"); print a[1]}' | xargs -I {} ip tunnel del {}
-  ip link show | awk '/GRE6Tun/ {split($2,a,"@"); print a[1]}' | xargs -I {} ip link set {} down
-  ip link show | awk '/GRE6Tun/ {split($2,a,"@"); print a[1]}' | xargs -I {} ip tunnel del {}
+  ip link show | awk '/IO64/ {split($2,a,"@"); print a[1]}' | xargs -I {} ip link set {} down
+  ip link show | awk '/IO64/ {split($2,a,"@"); print a[1]}' | xargs -I {} ip tunnel del {}
+  ip link show | awk '/GRE6/ {split($2,a,"@"); print a[1]}' | xargs -I {} ip link set {} down
+  ip link show | awk '/GRE6/ {split($2,a,"@"); print a[1]}' | xargs -I {} ip tunnel del {}
   echo "uninstalled successfully"
   read -p "do you want to reboot?(recommended)[y/n] :" yes_no
   if [[ $yes_no =~ ^[Yy]$ ]] || [[ $yes_no =~ ^[Yy]es$ ]]; then
